@@ -1,193 +1,233 @@
-import * as React from "react"
-import type { HeadFC, PageProps } from "gatsby"
+import React, { useEffect, useState } from "react";
+import type { HeadFC, PageProps } from "gatsby";
+import { Link } from "gatsby";
+import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
+import Layout from "@/components/layout/layout";
+import HeroTriangle from "@/components/common/heroTriangle";
+import KlerosLg from "@/assets/images/klerosLg.png";
+import KlerosSm from "@/assets/images/klerosSm.png";
+import GivingFood from "@/assets/images/givingFood.png";
+import Book from "@/assets/images/book2.png";
 
-const pageStyles = {
-  color: "#232129",
-  padding: 96,
-  fontFamily: "-apple-system, Roboto, sans-serif, serif",
-}
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-}
-const headingAccentStyles = {
-  color: "#663399",
-}
-const paragraphStyles = {
-  marginBottom: 48,
-}
-const codeStyles = {
-  color: "#8A6534",
-  padding: 4,
-  backgroundColor: "#FFF4DB",
-  fontSize: "1.25rem",
-  borderRadius: 4,
-}
-const listStyles = {
-  marginBottom: 96,
-  paddingLeft: 0,
-}
-const doclistStyles = {
-  paddingLeft: 0,
-}
-const listItemStyles = {
-  fontWeight: 300,
-  fontSize: 24,
-  maxWidth: 560,
-  marginBottom: 30,
+interface CardProps {
+  hoverState?: boolean | null;
+  imgLg?: string;
+  imgSm?: string;
+  title: string;
+  paragraph: string;
+  linkText: string;
+  link?: string;
 }
 
-const linkStyle = {
-  color: "#8954A8",
-  fontWeight: "bold",
-  fontSize: 16,
-  verticalAlign: "5%",
-}
+const CardContent: React.FC<CardProps> = ({
+  hoverState,
+  title,
+  paragraph,
+  linkText,
+}) => {
+  return (
+    <div className="px-6 py-4 xs:px-4 xs:py-2 md:px-6 md:py-4 w-full h-full flex flex-col">
+      <div className="font-bold text-2xl md:mb-2 dark:text-white text-center">
+        {title}
+      </div>
+      <div className="flex flex-col justify-between flex-1">
+        <p className="text-gray-700 text-sm lg:text-base dark:text-gray-400 mt-2 !leading-6 lg:!leading-7">
+          {paragraph}
+        </p>
 
-const docLinkStyle = {
-  ...linkStyle,
-  listStyleType: "none",
-  display: `inline-block`,
-  marginBottom: 24,
-  marginRight: 12,
-}
+        <div
+          className={`${
+            hoverState
+              ? "text-gray-200 dark:text-gray-400"
+              : "text-gray-300 dark:text-gray-500"
+          } text-sm xs:text-base underline`}
+        >
+          <p className="inline-block">{linkText}</p>
+          <p className="inline-block">
+            <ArrowLongRightIcon className="h-4 w-4 ml-1" />
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-const descriptionStyle = {
-  color: "#232129",
-  fontSize: 14,
-  marginTop: 10,
-  marginBottom: 0,
-  lineHeight: 1.25,
-}
+const cardItems = [
+  {
+    imgLg: GivingFood,
+    imgSm: GivingFood,
+    title: "Learn More",
+    paragraph:
+      "Learn about our goal to provide a secure, transparent, and completely decentralized protocol, that connects donors to fundraisers around the globe!",
+    linkText: "Learn More",
+    link: "#",
+  },
+  {
+    imgLg: Book,
+    imgSm: Book,
+    title: "Documentation",
+    paragraph:
+      "Learn how to use the protocol, see our whitepaper, how Arber works, and more!",
+    linkText: "Documentation",
+    link: "https://arber.gitbook.io/api-docs/",
+  },
+  {
+    imgLg: KlerosLg,
+    imgSm: KlerosSm,
+    title: "Kleros",
+    paragraph:
+      "How we integrate Kleros to secure our DAO is explained in detail in the documentation. For more information on the Kleros protocol, and to learn how they resolve disputes, check them out!",
+    linkText: "Check out Kleros",
+    link: "https://kleros.io",
+  },
+];
 
-const docLinks = [
-  {
-    text: "TypeScript Documentation",
-    url: "https://www.gatsbyjs.com/docs/how-to/custom-configuration/typescript/",
-    color: "#8954A8",
-  },
-  {
-    text: "GraphQL Typegen Documentation",
-    url: "https://www.gatsbyjs.com/docs/how-to/local-development/graphql-typegen/",
-    color: "#8954A8",
-  }
-]
+const CardLg: React.FC<CardProps> = (props) => {
+  const [hoverState, setHoverState] = useState(false);
+  const { imgLg, title, paragraph, linkText, link } = props;
 
-const badgeStyle = {
-  color: "#fff",
-  backgroundColor: "#088413",
-  border: "1px solid #088413",
-  fontSize: 11,
-  fontWeight: "bold",
-  letterSpacing: 1,
-  borderRadius: 4,
-  padding: "4px 6px",
-  display: "inline-block",
-  position: "relative" as "relative",
-  top: -2,
-  marginLeft: 10,
-  lineHeight: 1,
-}
+  return (
+    <a
+      onMouseEnter={() => setHoverState(true)}
+      onMouseLeave={() => setHoverState(false)}
+      href={link}
+      target="_blank"
+    >
+      <div className="max-w-[14rem] lg:max-w-xs rounded-xl overflow-hidden shadow-xl transition ease-in-out duration-300 hover:scale-105 hover:-translate-y-2">
+        <div className="bg-white dark:bg-gray-800 w-full aspect-video relative overflow-hidden">
+          <img
+            className="absolute m-auto w-full aspect-video"
+            src={imgLg}
+            alt="Sunset in the mountains"
+          />
+        </div>
+        <div
+          className={`bg-white dark:bg-gray-800 h-80 lg:h-72 flex flex-col justify-center hover`}
+        >
+          <CardContent
+            hoverState={hoverState}
+            title={title}
+            paragraph={paragraph}
+            linkText={linkText}
+            link={link}
+          />
+        </div>
+      </div>
+    </a>
+  );
+};
 
-const links = [
-  {
-    text: "Tutorial",
-    url: "https://www.gatsbyjs.com/docs/tutorial/",
-    description:
-      "A great place to get started if you're new to web development. Designed to guide you through setting up your first Gatsby site.",
-    color: "#E95800",
-  },
-  {
-    text: "How to Guides",
-    url: "https://www.gatsbyjs.com/docs/how-to/",
-    description:
-      "Practical step-by-step guides to help you achieve a specific goal. Most useful when you're trying to get something done.",
-    color: "#1099A8",
-  },
-  {
-    text: "Reference Guides",
-    url: "https://www.gatsbyjs.com/docs/reference/",
-    description:
-      "Nitty-gritty technical descriptions of how Gatsby works. Most useful when you need detailed information about Gatsby's APIs.",
-    color: "#BC027F",
-  },
-  {
-    text: "Conceptual Guides",
-    url: "https://www.gatsbyjs.com/docs/conceptual/",
-    description:
-      "Big-picture explanations of higher-level Gatsby concepts. Most useful for building understanding of a particular topic.",
-    color: "#0D96F2",
-  },
-  {
-    text: "Plugin Library",
-    url: "https://www.gatsbyjs.com/plugins",
-    description:
-      "Add functionality and customize your Gatsby site or app with thousands of plugins built by our amazing developer community.",
-    color: "#8EB814",
-  },
-  {
-    text: "Build and Host",
-    url: "https://www.gatsbyjs.com/cloud",
-    badge: true,
-    description:
-      "Now you’re ready to show the world! Give your Gatsby site superpowers: Build and host on Gatsby Cloud. Get started for free!",
-    color: "#663399",
-  },
-]
+const CardSm: React.FC<CardProps> = (props) => {
+  const [hoverState, setHoverState] = useState(false);
+  const { imgSm, title, paragraph, linkText, link } = props;
+
+  return (
+    <a
+      onMouseEnter={() => setHoverState(true)}
+      onMouseLeave={() => setHoverState(false)}
+      href={link}
+      target="_blank"
+    >
+      <div
+        className="rounded-xl shadow-xl flex xs:h-60 sm:h-40 transition ease-in-out duration-300 hover:scale-105 hover:-translate-y-1"
+        style={{ minHeight: "12rem" }}
+      >
+        <div
+          className="bg-white dark:bg-gray-800 h-full hidden xs:block rounded-l-xl"
+          style={{ aspectRatio: 3 / 4 }}
+        >
+          <img
+            className="rounded-l-xl object-cover h-full"
+            style={{ aspectRatio: 3 / 4 }}
+            src={imgSm}
+            alt="Sunset in the mountains"
+          />
+        </div>
+        <div className="a rounded-l-xl rounded-r-xl  flex flex-col justify-center bg-white dark:bg-gray-800">
+          <CardContent
+            hoverState={hoverState}
+            title={title}
+            paragraph={paragraph}
+            linkText={linkText}
+          />
+        </div>
+      </div>
+    </a>
+  );
+};
 
 const IndexPage: React.FC<PageProps> = () => {
   return (
-    <main style={pageStyles}>
-      <h1 style={headingStyles}>
-        Congratulations
-        <br />
-        <span style={headingAccentStyles}>— you just made a Gatsby site! 🎉🎉🎉</span>
-      </h1>
-      <p style={paragraphStyles}>
-        Edit <code style={codeStyles}>src/pages/index.tsx</code> to see this page
-        update in real-time. 😎
-      </p>
-      <ul style={doclistStyles}>
-        {docLinks.map(doc => (
-          <li key={doc.url} style={docLinkStyle}>
-            <a
-              style={linkStyle}
-              href={`${doc.url}?utm_source=starter&utm_medium=ts-docs&utm_campaign=minimal-starter-ts`}
-            >
-              {doc.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <ul style={listStyles}>
-        {links.map(link => (
-          <li key={link.url} style={{ ...listItemStyles, color: link.color }}>
-            <span>
-              <a
-                style={linkStyle}
-                href={`${link.url}?utm_source=starter&utm_medium=start-page&utm_campaign=minimal-starter-ts`}
-              >
-                {link.text}
-              </a>
-              {link.badge && (
-                <span style={badgeStyle} aria-label="New Badge">
-                  NEW!
-                </span>
-              )}
-              <p style={descriptionStyle}>{link.description}</p>
-            </span>
-          </li>
-        ))}
-      </ul>
-      <img
-        alt="Gatsby G Logo"
-        src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
-      />
-    </main>
-  )
-}
+    <Layout>
+      <div className="min-h-screen relative container mx-auto">
+        <HeroTriangle
+          rotation={20}
+          className={`absolute -left-52 sm:-left-72 lg:-left-96 4xl:-left-1/4 top-96 sm:top-56 md:top-36 lg:top-8 opacity-40`}
+          style={{ width: "calc(35vw + 30vh)" }}
+        />
+        <HeroTriangle
+          rotation={330}
+          className={`absolute -right-36 sm:-right-56 lg:-right-96 4xl:-right-1/3 -top-36 sm:-top-52 lg:-top-72 4xl:-top-1/3 opacity-40`}
+          style={{ width: "calc(35vw + 30vh)" }}
+        />
+        <HeroTriangle
+          rotation={20}
+          className={`absolute -bottom-28 lg:-bottom-44 2xl:-bottom-1/3 -right-16 sm:-right-36 lg:right-0 opacity-40`}
+          style={{ width: "calc(35vw + 30vh)" }}
+        />
 
-export default IndexPage
+        <div className="relative mb-28">
+          <div className="w-full pt-24 xs:pt-32 sm:pt-48">
+            <div className="relative ml-5 xs:mx-auto w-fit">
+              <p className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800 dark:text-white">
+                Revolutionizing Donations.
+              </p>
+              <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary ">
+                By the people for the people.
+              </p>
+            </div>
+            <div className="hidden md:block">
+              {/* space-x-6 lg:space-x-10 */}
+              <div className="flex justify-between mt-20 ">
+                {cardItems.map((item, idx) => (
+                  <CardLg
+                    key={idx}
+                    imgLg={item.imgLg}
+                    title={item.title}
+                    paragraph={item.paragraph}
+                    linkText={item.linkText}
+                    link={item.link}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="block md:hidden">
+              <div className="flex flex-col justify-center space-y-6 mt-10">
+                {cardItems.map((item, idx) => (
+                  <CardSm
+                    key={idx}
+                    imgSm={item.imgSm}
+                    title={item.title}
+                    paragraph={item.paragraph}
+                    linkText={item.linkText}
+                    link={item.link}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-export const Head: HeadFC = () => <title>Home Page</title>
+      <div className="h-screen">
+        <div className="h-full bg-white dark:bg-gray-800 z-30 relative">
+          <div className="h-full bg-gradient-to-r from-primary to-secondary opacity-30 z-20 "></div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default IndexPage;
+
+export const Head: HeadFC = () => <title>Home Page</title>;
