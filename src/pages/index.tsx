@@ -7,7 +7,7 @@ import HeroTriangle from "@/components/common/heroTriangle";
 import KlerosLg from "@/assets/images/klerosLg.png";
 import KlerosSm from "@/assets/images/klerosSm.png";
 import GivingFood from "@/assets/images/givingFood.png";
-import Book from "@/assets/images/book2.png";
+import Book from "@/assets/images/book.png";
 
 interface CardProps {
   hoverState?: boolean | null;
